@@ -2,7 +2,7 @@ name: Deploy RALLY 2026 to GitHub Pages
 
 on:
   push:
-    branches: ['main']
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -24,26 +24,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: bun install --frozen-lockfile
 
-      - name: Validate tournament roster and JSON data
-        run: npm run validate
+      - name: Validate tournament data
+        run: bun run validate
 
       - name: Type-check
-        run: npm run lint
+        run: bun run lint
 
       - name: Build production bundle
         env:
           VITE_BASE_PATH: /
-        run: npm run build
+        run: bun run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
