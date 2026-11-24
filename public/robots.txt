@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rally-tournament-2026.github.io/rally-tournament-2026/sitemap.xml
+Sitemap: https://rally.harijith.com/sitemap.xml
