@@ -1,0 +1,6 @@
+{
+  "name": "RALLY 2026 | Every Point Matters",
+  "description": "Rally 2026 – A premium men's doubles badminton championship featuring six teams and 68 players.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

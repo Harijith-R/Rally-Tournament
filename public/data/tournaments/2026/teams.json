@@ -1,0 +1,72 @@
+{
+  "tournamentId": "rally-2026",
+  "totalTeams": 6,
+  "teams": [
+    {
+      "id": "team-1",
+      "number": 1,
+      "code": "T1",
+      "name": "TEAM 1",
+      "group": "A",
+      "playerCount": 12,
+      "color": "#E11D48",
+      "accentTint": "rgba(225, 29, 72, 0.14)",
+      "emblemVariant": "chevron"
+    },
+    {
+      "id": "team-2",
+      "number": 2,
+      "code": "T2",
+      "name": "TEAM 2",
+      "group": "B",
+      "playerCount": 12,
+      "color": "#2563EB",
+      "accentTint": "rgba(37, 99, 235, 0.14)",
+      "emblemVariant": "shield"
+    },
+    {
+      "id": "team-3",
+      "number": 3,
+      "code": "T3",
+      "name": "TEAM 3",
+      "group": "A",
+      "playerCount": 11,
+      "color": "#10B981",
+      "accentTint": "rgba(16, 185, 129, 0.14)",
+      "emblemVariant": "diamond"
+    },
+    {
+      "id": "team-4",
+      "number": 4,
+      "code": "T4",
+      "name": "TEAM 4",
+      "group": "B",
+      "playerCount": 11,
+      "color": "#D97706",
+      "accentTint": "rgba(217, 119, 6, 0.14)",
+      "emblemVariant": "crest"
+    },
+    {
+      "id": "team-5",
+      "number": 5,
+      "code": "T5",
+      "name": "TEAM 5",
+      "group": "A",
+      "playerCount": 11,
+      "color": "#8B5CF6",
+      "accentTint": "rgba(139, 92, 246, 0.14)",
+      "emblemVariant": "wings"
+    },
+    {
+      "id": "team-6",
+      "number": 6,
+      "code": "T6",
+      "name": "TEAM 6",
+      "group": "B",
+      "playerCount": 11,
+      "color": "#06B6D4",
+      "accentTint": "rgba(6, 182, 212, 0.14)",
+      "emblemVariant": "prism"
+    }
+  ]
+}

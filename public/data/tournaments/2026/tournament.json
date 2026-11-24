@@ -1,0 +1,45 @@
+{
+  "id": "rally-2026",
+  "name": "RALLY TOURNAMENT 2026",
+  "brand": "RALLY 2026",
+  "tagline": "EVERY POINT MATTERS.",
+  "subtitle": "MEN'S DOUBLES CHAMPIONSHIP",
+  "description": "Six teams. Sixty-eight players. One championship.",
+  "year": 2026,
+  "format": "Men's Doubles",
+  "stats": {
+    "teams": 6,
+    "players": 68,
+    "groups": 2,
+    "playersPerGroup": 34,
+    "winningPoints": 100
+  },
+  "eliminationMilestones": [25, 50, 75],
+  "groups": [
+    {
+      "id": "A",
+      "name": "Group A",
+      "teamIds": ["team-1", "team-3", "team-5"],
+      "playerCount": 34
+    },
+    {
+      "id": "B",
+      "name": "Group B",
+      "teamIds": ["team-2", "team-4", "team-6"],
+      "playerCount": 34
+    }
+  ],
+  "champion": {
+    "announced": false,
+    "headline": "THE CHAMPION WILL BE CROWNED.",
+    "teamId": null,
+    "finalScore": null,
+    "matchId": null,
+    "crownedDate": null,
+    "summary": null,
+    "photos": []
+  },
+  "assets": {
+    "trophyGlbUrl": null
+  }
+}

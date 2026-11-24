@@ -1,0 +1,26 @@
+{
+  "tournamentId": "rally-2026",
+  "status": "pending",
+  "pointsSystemConfirmed": false,
+  "pointsSystemNote": "Official standings tables, points allocation rules, and tie-breaker criteria will be published by the tournament committee once match play begins.",
+  "groups": {
+    "A": [
+      { "teamId": "team-1", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+      { "teamId": "team-3", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+      { "teamId": "team-5", "position": null, "played": 0, "won": 0, "lost": 0, "points": null }
+    ],
+    "B": [
+      { "teamId": "team-2", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+      { "teamId": "team-4", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+      { "teamId": "team-6", "position": null, "played": 0, "won": 0, "lost": 0, "points": null }
+    ]
+  },
+  "overall": [
+    { "teamId": "team-1", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+    { "teamId": "team-2", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+    { "teamId": "team-3", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+    { "teamId": "team-4", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+    { "teamId": "team-5", "position": null, "played": 0, "won": 0, "lost": 0, "points": null },
+    { "teamId": "team-6", "position": null, "played": 0, "won": 0, "lost": 0, "points": null }
+  ]
+}

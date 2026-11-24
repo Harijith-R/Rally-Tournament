@@ -1,0 +1,102 @@
+{
+  "tournamentId": "rally-2026",
+  "formatOverview": {
+    "discipline": "Men's Doubles",
+    "onCourtPerTeam": 2,
+    "startingScore": "0–0",
+    "winningTarget": 100,
+    "summary": "Matches are played in Men's Doubles format with two active players from each team on court at all times. Scoring begins at 0–0 and the first team to reach 100 points wins, strictly subject to mandatory elimination and full-squad participation rules."
+  },
+  "milestones": [
+    {
+      "points": 25,
+      "title": "FIRST ELIMINATION",
+      "subtitle": "25 Points Milestone",
+      "description": "The opposing captain selects one active player from the team reaching 25 points for immediate mandatory elimination. An unused squad member enters court.",
+      "type": "elimination"
+    },
+    {
+      "points": 50,
+      "title": "SECOND ELIMINATION",
+      "subtitle": "50 Points Milestone",
+      "description": "Mid-match tactical checkpoint. A second mandatory elimination is enforced by the opposing captain, testing squad depth and fresh doubles chemistry.",
+      "type": "elimination"
+    },
+    {
+      "points": 75,
+      "title": "THIRD ELIMINATION",
+      "subtitle": "75 Points Milestone",
+      "description": "Final elimination checkpoint entering the championship stretch. Teams must balance closing power with remaining squad participation obligations.",
+      "type": "elimination"
+    },
+    {
+      "points": 100,
+      "title": "MATCH VICTORY",
+      "subtitle": "100 Points Target",
+      "description": "First team to reach 100 points claims victory — provided every registered squad member has stepped on court during the match.",
+      "type": "victory"
+    }
+  ],
+  "officialRules": [
+    {
+      "number": 1,
+      "category": "Elimination",
+      "title": "Mandatory Elimination",
+      "text": "Elimination at each milestone (25, 50, and 75 points) is mandatory and cannot be waived or deferred."
+    },
+    {
+      "number": 2,
+      "category": "Elimination",
+      "title": "Opposing Captain Selection",
+      "text": "At each elimination milestone, the opposing captain selects one of the two active players on court to be eliminated."
+    },
+    {
+      "number": 3,
+      "category": "Substitution",
+      "title": "Immediate Replacement",
+      "text": "A replacement player from the squad must immediately enter the court before play resumes."
+    },
+    {
+      "number": 4,
+      "category": "Eligibility",
+      "title": "Unused Replacement Requirement",
+      "text": "The incoming replacement player must not have previously played in that match."
+    },
+    {
+      "number": 5,
+      "category": "Elimination",
+      "title": "Permanent Match Removal",
+      "text": "Eliminated players cannot return to the court for the remainder of that match."
+    },
+    {
+      "number": 6,
+      "category": "Substitution",
+      "title": "Voluntary Substitutions",
+      "text": "Voluntary substitutions are permitted after the completion of any rally."
+    },
+    {
+      "number": 7,
+      "category": "Court Play",
+      "title": "Continuous Doubles Formation",
+      "text": "Two players from each team must always be on court throughout the match."
+    },
+    {
+      "number": 8,
+      "category": "Participation",
+      "title": "Full Squad Participation",
+      "text": "Every team member on the match roster must participate before their team reaches 100 points."
+    },
+    {
+      "number": 9,
+      "category": "Participation",
+      "title": "No Minimum Playing Time",
+      "text": "There is no minimum playing time or minimum points requirement for a player's participation to count."
+    },
+    {
+      "number": 10,
+      "category": "Forfeit",
+      "title": "Participation Compliance Enforcement",
+      "text": "If a team reaches 100 points without all team members having participated, the opposing team is awarded the victory."
+    }
+  ]
+}
