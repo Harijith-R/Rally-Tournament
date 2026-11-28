@@ -254,13 +254,13 @@ const ProceduralRallyTrophy: React.FC = () => {
       <mesh geometry={geometries.basePlinth} material={materials.obsidianBase} castShadow receiveShadow />
 
       {/* Base Lower Metallic Rim Trim */}
-      <mesh position={[0, 0.125, 0]} rotation={[Math.PI / 2, 0, 0]}>
+      <mesh position={[0, 0.125, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <torusGeometry args={[0.935, 0.014, 10, 64]} />
         <primitive object={materials.silverBrushed} attach="material" />
       </mesh>
 
       {/* Engraved RALLY 2026 Front Nameplate */}
-      <mesh geometry={geometries.plaque} material={materials.plaqueMat} position={[0, 0.36, 0]} />
+      <mesh geometry={geometries.plaque} material={materials.plaqueMat} position={[0, 0.36, 0]} receiveShadow />
 
       {/* Subtle Lime-Green Plinth Illumination Ring */}
       <mesh
@@ -274,10 +274,10 @@ const ProceduralRallyTrophy: React.FC = () => {
       <mesh geometry={geometries.stem} material={materials.silverPolished} castShadow receiveShadow />
 
       {/* Two Sweeping Racket-Inspired Sculptural Arcs */}
-      <mesh geometry={geometries.arcLeft} material={materials.silverPolished} castShadow />
-      <mesh geometry={geometries.arcRight} material={materials.silverPolished} castShadow />
-      <mesh geometry={geometries.innerArcLeft} material={materials.silverBrushed} />
-      <mesh geometry={geometries.innerArcRight} material={materials.silverBrushed} />
+      <mesh geometry={geometries.arcLeft} material={materials.silverPolished} castShadow receiveShadow />
+      <mesh geometry={geometries.arcRight} material={materials.silverPolished} castShadow receiveShadow />
+      <mesh geometry={geometries.innerArcLeft} material={materials.silverBrushed} castShadow receiveShadow />
+      <mesh geometry={geometries.innerArcRight} material={materials.silverBrushed} castShadow receiveShadow />
 
       {/* Shuttlecock-Inspired Metallic Crown */}
       <group position={[0, 2.26, 0]}>
@@ -285,6 +285,8 @@ const ProceduralRallyTrophy: React.FC = () => {
           geometry={geometries.crownCollar}
           material={materials.silverBrushed}
           rotation={[Math.PI / 2, 0, 0]}
+          castShadow
+          receiveShadow
         />
         <mesh
           geometry={geometries.crownLimeHalo}
@@ -297,6 +299,7 @@ const ProceduralRallyTrophy: React.FC = () => {
           material={materials.silverPolished}
           position={[0, 0.16, 0]}
           castShadow
+          receiveShadow
         />
 
         {/* 12 Flared Metallic Shuttlecock Crown Blades */}
@@ -308,6 +311,7 @@ const ProceduralRallyTrophy: React.FC = () => {
                 material={idx % 2 === 0 ? materials.silverPolished : materials.silverBrushed}
                 rotation={[0, Math.PI / 2, 0]}
                 castShadow
+                receiveShadow
               />
             </group>
           </group>

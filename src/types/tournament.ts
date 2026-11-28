@@ -28,6 +28,7 @@ export interface TournamentData {
   subtitle: string;
   description: string;
   year: number;
+  startDate?: string | null;
   format: string;
   stats: {
     teams: number;

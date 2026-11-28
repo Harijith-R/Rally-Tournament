@@ -1,14 +1,37 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
 import { ChevronRight } from 'lucide-react';
 import { TeamEmblem } from '../components/TeamEmblem';
 import { useTournament } from '../context/TournamentContext';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
+import { prefersReducedMotion } from '../components/three/webglUtils';
 import type { GroupId } from '../types/tournament';
+
+function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace('#', '');
+  const full =
+    clean.length === 3
+      ? clean
+          .split('')
+          .map((c) => c + c)
+          .join('')
+      : clean;
+  const num = parseInt(full, 16);
+  if (Number.isNaN(num)) return `rgba(163, 230, 53, ${alpha})`;
+  const r = (num >> 16) & 255;
+  const g = (num >> 8) & 255;
+  const b = num & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+const RESTING_CARD_SHADOW =
+  '0 4px 18px -6px rgba(4, 8, 13, 0.36), 0 0 0 1px rgba(255, 255, 255, 0), 0 0 0 0 rgba(0, 0, 0, 0)';
 
 export const TeamsPage: React.FC = () => {
   const { data, getPlayersByTeam } = useTournament();
   const [groupFilter, setGroupFilter] = useState<'ALL' | GroupId>('ALL');
+  const gridRef = useRef<HTMLDivElement | null>(null);
 
   useDocumentMeta(
     'Teams | RALLY 2026',
@@ -20,6 +43,102 @@ export const TeamsPage: React.FC = () => {
     if (groupFilter === 'ALL') return data.teams;
     return data.teams.filter((t) => t.group === groupFilter);
   }, [data, groupFilter]);
+
+  useEffect(() => {
+    if (prefersReducedMotion() || !gridRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.team-card-item', {
+        y: 16,
+        opacity: 0,
+        scale: 0.985,
+        duration: 0.45,
+        stagger: 0.055,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, [groupFilter, visibleTeams.length]);
+
+  const animateCardEnter = (el: HTMLElement, teamColor: string) => {
+    if (prefersReducedMotion()) return;
+    const hairline = el.querySelector<HTMLElement>('.team-card-hairline');
+    const emblem = el.querySelector<HTMLElement>('.team-card-emblem');
+
+    gsap.to(el, {
+      scale: 1.022,
+      y: -5,
+      boxShadow: `0 26px 52px -14px rgba(4, 8, 13, 0.84), 0 0 0 1px rgba(255, 255, 255, 0.2), 0 10px 30px -10px ${hexToRgba(
+        teamColor,
+        0.24
+      )}`,
+      duration: 0.34,
+      ease: 'power3.out',
+      overwrite: 'auto',
+    });
+
+    if (hairline) {
+      gsap.to(hairline, {
+        scaleY: 1.45,
+        duration: 0.3,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    }
+
+    if (emblem) {
+      gsap.to(emblem, {
+        scale: 1.06,
+        duration: 0.34,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    }
+  };
+
+  const animateCardLeave = (el: HTMLElement) => {
+    if (prefersReducedMotion()) return;
+    const hairline = el.querySelector<HTMLElement>('.team-card-hairline');
+    const emblem = el.querySelector<HTMLElement>('.team-card-emblem');
+
+    gsap.to(el, {
+      scale: 1,
+      y: 0,
+      boxShadow: RESTING_CARD_SHADOW,
+      duration: 0.4,
+      ease: 'power3.out',
+      overwrite: 'auto',
+    });
+
+    if (hairline) {
+      gsap.to(hairline, {
+        scaleY: 1,
+        duration: 0.35,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    }
+
+    if (emblem) {
+      gsap.to(emblem, {
+        scale: 1,
+        duration: 0.38,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    }
+  };
+
+  const animateCardPress = (el: HTMLElement) => {
+    if (prefersReducedMotion()) return;
+    gsap.to(el, {
+      scale: 1.006,
+      y: -2,
+      duration: 0.14,
+      ease: 'power2.out',
+      overwrite: 'auto',
+    });
+  };
 
   if (!data) return null;
 
@@ -64,7 +183,7 @@ export const TeamsPage: React.FC = () => {
         </div>
 
         {/* Six Premium Team Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {visibleTeams.map((team) => {
             const roster = getPlayersByTeam(team.id);
             const previewNames = roster.slice(0, 4).map((p) => p.name).join(' · ');
@@ -73,10 +192,16 @@ export const TeamsPage: React.FC = () => {
               <Link
                 key={team.id}
                 to={`/teams/${team.id}`}
-                className="group relative flex flex-col justify-between border border-white/10 bg-[#17212B] p-8 transition-all duration-200 hover:-translate-y-1 hover:border-white/30"
+                onMouseEnter={(e) => animateCardEnter(e.currentTarget, team.color)}
+                onMouseLeave={(e) => animateCardLeave(e.currentTarget)}
+                onMouseDown={(e) => animateCardPress(e.currentTarget)}
+                onFocus={(e) => animateCardEnter(e.currentTarget, team.color)}
+                onBlur={(e) => animateCardLeave(e.currentTarget)}
+                style={{ boxShadow: RESTING_CARD_SHADOW }}
+                className="team-card-item group relative flex flex-col justify-between border border-white/10 bg-[#17212B] p-8 will-change-transform transition-colors duration-200 hover:border-white/25"
               >
                 <div
-                  className="absolute top-0 inset-x-0 h-[3px]"
+                  className="team-card-hairline absolute top-0 inset-x-0 h-[3px] origin-top"
                   style={{ backgroundColor: team.color }}
                 />
 
@@ -93,13 +218,14 @@ export const TeamsPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <TeamEmblem
-                      variant={team.emblemVariant}
-                      color={team.color}
-                      number={team.number}
-                      size={64}
-                      className="shrink-0 transition-transform duration-200 group-hover:scale-105"
-                    />
+                    <div className="team-card-emblem shrink-0">
+                      <TeamEmblem
+                        variant={team.emblemVariant}
+                        color={team.color}
+                        number={team.number}
+                        size={64}
+                      />
+                    </div>
                   </div>
 
                   {/* Subtle Identity Bar & Roster Preview */}

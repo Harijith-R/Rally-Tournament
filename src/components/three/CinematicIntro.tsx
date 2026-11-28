@@ -270,6 +270,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
 
   const [progress, setProgress] = useState(0);
   const [brandVisible, setBrandVisible] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [exiting, setExiting] = useState(false);
 
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -309,6 +310,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
 
   const handleFinish = () => {
     if (exiting) return;
+    setIsTransitioning(true);
     setExiting(true);
     timelineRef.current?.kill();
     window.setTimeout(() => {
@@ -470,9 +472,9 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
         camY: 2.1,
         camZ: 5.55,
         lookY: 1.75,
-        trophyRotY: 0.95,
-        duration: 1.6,
-        ease: 'power2.out',
+        trophyRotY: 1.25,
+        duration: 3.6,
+        ease: 'power1.out',
       },
       7.6
     );
@@ -484,22 +486,23 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
     };
   }, [webglReady, reducedMotion, forcePlayReduced]);
 
-  // Auto-transition gracefully 2.6 seconds after brand reveal finishes
+  // Fade out all UI text overlays 2 seconds before transitioning to the main homepage
   useEffect(() => {
     if (!brandVisible || !webglReady || (reducedMotion && !forcePlayReduced)) return;
-    const timer = window.setTimeout(() => {
-      handleFinish();
-    }, 2600);
-    return () => window.clearTimeout(timer);
-  }, [brandVisible, webglReady, reducedMotion, forcePlayReduced]);
 
-  const currentChapter = useMemo(() => {
-    let active = SCENE_CHAPTERS[0];
-    for (const c of SCENE_CHAPTERS) {
-      if (progress >= c.threshold) active = c;
-    }
-    return active.label;
-  }, [progress]);
+    const fadeOverlaysTimer = window.setTimeout(() => {
+      setIsTransitioning(true);
+    }, 1800);
+
+    const transitionTimer = window.setTimeout(() => {
+      handleFinish();
+    }, 3800);
+
+    return () => {
+      window.clearTimeout(fadeOverlaysTimer);
+      window.clearTimeout(transitionTimer);
+    };
+  }, [brandVisible, webglReady, reducedMotion, forcePlayReduced]);
 
   // Graceful Static Fallback (No WebGL or Reduced Motion mode)
   if (!webglReady || (reducedMotion && !forcePlayReduced)) {
@@ -608,25 +611,33 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
         </Canvas>
       </div>
 
-      {/* Top Bar: Minimal Identity & Skip Intro Control (solid/rgba backing, zero backdrop-filter over WebGL) */}
-      <div className="relative z-10 flex items-center justify-between px-5 sm:px-10 pt-6 pointer-events-none">
+      {/* Top Bar: Minimal Identity & Skip Intro Control (fades out cleanly during isTransitioning) */}
+      <div
+        className={`relative z-10 flex items-center justify-between px-5 sm:px-10 pt-6 pointer-events-none transition-opacity duration-700 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         <div className="font-display text-lg font-bold tracking-[0.18em] text-white/90">
           RALLY <span className="text-[#A3E635]">2026</span>
         </div>
         <button
           type="button"
           onClick={handleFinish}
-          className="pointer-events-auto inline-flex items-center gap-2 border border-white/20 bg-[#101820]/90 px-4 py-2 text-xs font-medium tracking-[0.14em] text-white uppercase hover:border-[#A3E635] hover:text-[#A3E635] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A3E635]"
+          className={`inline-flex items-center gap-2 border border-white/20 bg-[#101820]/90 px-4 py-2 text-xs font-medium tracking-[0.14em] text-white uppercase hover:border-[#A3E635] hover:text-[#A3E635] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A3E635] ${
+            isTransitioning ? 'pointer-events-none' : 'pointer-events-auto'
+          }`}
         >
           <span>Skip Intro</span>
           <SkipForward className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      {/* Scene 6: Brand Reveal Typography Overlay */}
+      {/* Scene 6: Brand Reveal Typography Overlay (fades out 2s before homepage transition) */}
       <div
-        className={`pointer-events-none absolute inset-x-0 bottom-20 sm:bottom-24 z-10 px-6 text-center transition-all duration-700 ${
-          brandVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        className={`pointer-events-none absolute inset-x-0 bottom-16 sm:bottom-20 z-10 px-6 text-center transition-all duration-700 ${
+          brandVisible && !isTransitioning
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-6'
         }`}
       >
         <div className="mx-auto max-w-3xl bg-gradient-to-t from-[#0B1118]/90 via-[#0B1118]/55 to-transparent px-6 py-6">
@@ -640,7 +651,7 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
             EVERY POINT MATTERS.
           </p>
 
-          <div className="mt-6 pointer-events-auto">
+          <div className={`mt-6 ${brandVisible && !isTransitioning ? 'pointer-events-auto' : 'pointer-events-none'}`}>
             <button
               type="button"
               onClick={handleFinish}
@@ -653,12 +664,12 @@ export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, trop
         </div>
       </div>
 
-      {/* Bottom Timeline Progress Bar */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 px-5 sm:px-10 pb-6">
-        <div className="flex items-center justify-between text-[11px] tracking-[0.16em] text-[#AAB3BD] uppercase mb-2 tabular-nums">
-          <span>{currentChapter}</span>
-          <span>{Math.round(progress * 100)}%</span>
-        </div>
+      {/* Minimal Progress Bar Only (chapter & percentage texts hidden) */}
+      <div
+        className={`pointer-events-none absolute inset-x-0 bottom-0 z-10 px-5 sm:px-10 pb-6 transition-opacity duration-700 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         <div className="h-[2px] w-full bg-white/15 overflow-hidden">
           <div
             className="h-full bg-[#A3E635] transition-transform duration-75 origin-left"

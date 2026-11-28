@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ArrowRight, Calendar, ChevronRight, Play, Trophy } from 'lucide-react';
 import { AnimatedCounter } from '../components/AnimatedCounter';
+import { CountdownTimer } from '../components/CountdownTimer';
 import { MilestoneDiagram } from '../components/MilestoneDiagram';
 import { TeamEmblem } from '../components/TeamEmblem';
 import { useTournament } from '../context/TournamentContext';
@@ -55,7 +56,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onReplayIntro }) => {
   return (
     <div className="w-full">
       {/* SECTION 2: MAIN HERO */}
-      <section className="relative min-h-[88vh] flex items-end pb-16 sm:pb-24 pt-28 overflow-hidden border-b border-white/10">
+      <section className="relative min-h-[92vh] flex items-end pb-14 sm:pb-20 pt-10 sm:pt-14 overflow-hidden border-b border-white/10">
         <img
           src={RALLY_MEDIA.heroArenaBackdrop}
           alt="RALLY 2026 International Indoor Badminton Championship Arena"
@@ -66,49 +67,78 @@ export const HomePage: React.FC<HomePageProps> = ({ onReplayIntro }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-[#101820]/55" />
 
         <div ref={heroTextRef} className="relative z-10 mx-auto w-full max-w-[1360px] px-5 sm:px-8">
-          <div className="max-w-2xl">
-            <div className="hero-reveal flex items-center gap-3 text-xs font-medium tracking-[0.22em] text-[#C0C0C0] uppercase">
-              <span>{tournament.subtitle}</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-[#A3E635]">Season 2026</span>
+          {/* Interactive 3D RALLY Trophy elevated cleanly above the hero headline */}
+          <div className="-mt-4 sm:-mt-6 mb-10 sm:mb-12 lg:mb-14 w-full max-w-[330px] sm:max-w-[390px] lg:max-w-[420px]">
+            <Suspense
+              fallback={
+                <div className="flex h-[270px] sm:h-[315px] lg:h-[345px] items-center justify-center text-xs tracking-[0.2em] text-[#AAB3BD] uppercase">
+                  Loading 3D Trophy…
+                </div>
+              }
+            >
+              <TrophyShowcaseCanvas
+                trophyGlbUrl={tournament.assets?.trophyGlbUrl}
+                variant="hero"
+                trackViewportSpotlight
+                enableHoverFloat
+                trophyPosition={[0, -1.02, -0.35]}
+                heightClass="h-[270px] sm:h-[315px] lg:h-[345px]"
+              />
+            </Suspense>
+          </div>
+
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+            <div className="max-w-2xl">
+              <div className="hero-reveal flex items-center gap-3 text-xs font-medium tracking-[0.22em] text-[#C0C0C0] uppercase">
+                <span>{tournament.subtitle}</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#A3E635]">Season 2026</span>
+              </div>
+
+              <h1 className="hero-reveal mt-3 font-display text-6xl sm:text-8xl lg:text-[104px] font-bold tracking-[0.06em] text-white leading-[0.94]">
+                {tournament.brand}
+              </h1>
+
+              <p className="hero-reveal mt-4 font-display text-2xl sm:text-4xl font-medium tracking-[0.16em] text-[#A3E635]">
+                {tournament.tagline}
+              </p>
+
+              <p className="hero-reveal mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-[#D0D7DF]">
+                {tournament.description}
+              </p>
+
+              <div className="hero-reveal mt-8 flex flex-wrap items-center gap-4">
+                <Link
+                  to="/teams"
+                  className="inline-flex items-center gap-2.5 bg-[#A3E635] px-7 py-3.5 text-xs font-semibold tracking-[0.16em] text-[#101820] uppercase hover:bg-[#b5f24d] transition-colors whitespace-nowrap"
+                >
+                  <span>EXPLORE TEAMS</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  to="/fixtures"
+                  className="inline-flex items-center gap-2.5 border border-white/25 bg-[#101820]/80 px-7 py-3.5 text-xs font-semibold tracking-[0.16em] text-white uppercase hover:border-[#A3E635] hover:text-[#A3E635] transition-colors whitespace-nowrap"
+                >
+                  <span>VIEW FIXTURES</span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={onReplayIntro}
+                  className="inline-flex items-center gap-2 px-3 py-3 text-xs font-medium tracking-[0.14em] text-[#AAB3BD] uppercase hover:text-white transition-colors whitespace-nowrap"
+                >
+                  <Play className="h-3.5 w-3.5 text-[#A3E635]" />
+                  <span>Replay 3D Intro</span>
+                </button>
+              </div>
             </div>
 
-            <h1 className="hero-reveal mt-4 font-display text-6xl sm:text-8xl lg:text-[104px] font-bold tracking-[0.06em] text-white leading-[0.94]">
-              {tournament.brand}
-            </h1>
-
-            <p className="hero-reveal mt-4 font-display text-2xl sm:text-4xl font-medium tracking-[0.16em] text-[#A3E635]">
-              {tournament.tagline}
-            </p>
-
-            <p className="hero-reveal mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-[#D0D7DF]">
-              {tournament.description}
-            </p>
-
-            <div className="hero-reveal mt-9 flex flex-wrap items-center gap-4">
-              <Link
-                to="/teams"
-                className="inline-flex items-center gap-2.5 bg-[#A3E635] px-7 py-3.5 text-xs font-semibold tracking-[0.16em] text-[#101820] uppercase hover:bg-[#b5f24d] transition-colors whitespace-nowrap"
-              >
-                <span>EXPLORE TEAMS</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              <Link
-                to="/fixtures"
-                className="inline-flex items-center gap-2.5 border border-white/25 bg-[#101820]/80 px-7 py-3.5 text-xs font-semibold tracking-[0.16em] text-white uppercase hover:border-[#A3E635] hover:text-[#A3E635] transition-colors whitespace-nowrap"
-              >
-                <span>VIEW FIXTURES</span>
-              </Link>
-
-              <button
-                type="button"
-                onClick={onReplayIntro}
-                className="inline-flex items-center gap-2 px-3 py-3 text-xs font-medium tracking-[0.14em] text-[#AAB3BD] uppercase hover:text-white transition-colors whitespace-nowrap"
-              >
-                <Play className="h-3.5 w-3.5 text-[#A3E635]" />
-                <span>Replay 3D Intro</span>
-              </button>
+            <div className="hero-reveal w-full max-w-md lg:w-[440px] shrink-0">
+              <CountdownTimer
+                targetDate={tournament.startDate ?? '2026-12-19T09:00:00Z'}
+                label="FIRST SERVE COUNTDOWN"
+              />
             </div>
           </div>
         </div>
@@ -530,6 +560,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onReplayIntro }) => {
               >
                 <TrophyShowcaseCanvas
                   trophyGlbUrl={tournament.assets?.trophyGlbUrl}
+                  trackViewportSpotlight
+                  enableHoverFloat
                   heightClass="h-[440px] sm:h-[520px]"
                 />
               </Suspense>
